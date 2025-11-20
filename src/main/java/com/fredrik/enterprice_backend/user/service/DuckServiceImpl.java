@@ -3,7 +3,7 @@ package com.fredrik.enterprice_backend.user.service;
 import com.fredrik.enterprice_backend.user.dto.createDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.responseDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.updateDuckDTO;
-import com.fredrik.enterprice_backend.user.duckdetails_aka_userdetails.DuckDetailsService;
+
 import com.fredrik.enterprice_backend.user.exceptions.EmailAlreadyExistException;
 import com.fredrik.enterprice_backend.user.exceptions.UserAlreadyExistsException;
 import com.fredrik.enterprice_backend.user.mapper.DuckMapper;
@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 public class DuckServiceImpl implements DuckService{
     private final DuckRepository duckRepository;
-    private final DuckDetailsService duckDetailsService;
     private final DuckMapper duckMapper;
 
     // This will work in a way where it will tell Spring
@@ -36,7 +35,7 @@ public class DuckServiceImpl implements DuckService{
     @Override
     public responseDuckDTO createDuck(createDuckDTO createDuckDTO) {
         String username = createDuckDTO.username().trim();
-        String email = createDuckDTO.username().trim();
+        String email = createDuckDTO.email().trim();
 
         //? Check if the username is unique
         if (duckRepository.findByUsername(username).isPresent()){

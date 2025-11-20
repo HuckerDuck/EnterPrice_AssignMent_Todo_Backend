@@ -35,7 +35,7 @@ public enum DuckRoles {
     private final String roleName;
     private final Set<DuckPermissions> duckPermissions;
 
-    public List<SimpleGrantedAuthority> getDuckAuthorites (){
+    public List<SimpleGrantedAuthority> getDuckAuthorities(){
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
         authorityList.add(new SimpleGrantedAuthority(this.roleName));
         authorityList.addAll(this.duckPermissions.stream().map(

@@ -1,10 +1,10 @@
-package com.fredrik.enterprice_backend.user.Enum;
+package com.fredrik.enterprice_backend.user.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import static com.fredrik.enterprice_backend.user.Enum.CustomDuckPermissions.*;
+import static com.fredrik.enterprice_backend.user.enums.DuckPermissions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,9 @@ import java.util.Set;
 
 @AllArgsConstructor
 @Getter
-public enum CustomDuckRoles {
+public enum DuckRoles {
     USER(
-            CustomDuckRoleName.USER.getRoleName(),
+            DuckRoleNames.USER.getRoleName(),
             Set.of(
                     READ,
                     WRITE,
@@ -23,7 +23,7 @@ public enum CustomDuckRoles {
     ),
 
     ADMIN (
-            CustomDuckRoleName.ADMIN.getRoleName(),
+            DuckRoleNames.ADMIN.getRoleName(),
     Set.of(
             READ,
             WRITE,
@@ -33,7 +33,7 @@ public enum CustomDuckRoles {
     );
 
     private final String roleName;
-    private final Set<CustomDuckPermissions> duckPermissions;
+    private final Set<DuckPermissions> duckPermissions;
 
     public List<SimpleGrantedAuthority> getDuckAuthorites (){
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();

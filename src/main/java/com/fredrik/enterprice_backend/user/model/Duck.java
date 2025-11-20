@@ -1,6 +1,6 @@
-package com.fredrik.enterprice_backend.user.Model;
+package com.fredrik.enterprice_backend.user.model;
 
-import com.fredrik.enterprice_backend.user.Enum.CustomDuckRoles;
+import com.fredrik.enterprice_backend.user.enums.DuckRoles;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 
 @Table(name="users")
-public class CustomDuck {
+public class Duck {
    @Id
    @GeneratedValue(strategy = GenerationType.UUID)
    //! Making sure that nowone can set or get the ID
@@ -36,12 +36,16 @@ public class CustomDuck {
    @Column(nullable = false)
    private String password;
 
+   //? Adding a email for the user and making sure it's unique
+   @Column(nullable = false, unique = true)
+   private String email;
+
    //? This is gonna make more since later
    //? But basically it telling the database
    //? Hey u, this is an Enum field so I want you to save it like that
    @Enumerated(EnumType.STRING)
    @Column(nullable = false)
-   private CustomDuckRoles duckRoles = CustomDuckRoles.USER;
+   private DuckRoles duckRoles = DuckRoles.USER;
 
     //? You can't change the created_at when the user has been created
     @Setter(AccessLevel.NONE)
@@ -70,7 +74,7 @@ public class CustomDuck {
         }
 
         if(duckRoles == null){
-            this.duckRoles = CustomDuckRoles.USER;
+            this.duckRoles = DuckRoles.USER;
         }
     }
 

@@ -7,10 +7,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @RequestMapping("/api/ducks")
@@ -25,6 +24,35 @@ public class DuckController {
         responseDuckDTO createdDuck = duckService.createDuck(createDuckDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDuck);
     }
+
+    @GetMapping ("/username/{username}")
+    public ResponseEntity<responseDuckDTO> findDuckByUsername(
+            @PathVariable String username){
+        responseDuckDTO foundDuck = duckService.findDuckByUsername(username);
+        return ResponseEntity.ok(foundDuck);
+    }
+
+    @GetMapping ("/email/{email}")
+    public ResponseEntity<responseDuckDTO> findDuckByEmail(
+            @PathVariable String email){
+        responseDuckDTO foundDuck = duckService.findDuckByEmail(email);
+        return ResponseEntity.ok(foundDuck);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<responseDuckDTO>> getAllDucks(){
+        List<responseDuckDTO> allDucks = duckService.getAllDucks();
+        return ResponseEntity.ok(allDucks);
+    }
+
+    @DeleteMapping ("/disableUser/{username}")
+    public ResponseEntity<Void> disableDuck(
+            @PathVariable String username){
+        duckService.disableDuck(username);
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 
 }

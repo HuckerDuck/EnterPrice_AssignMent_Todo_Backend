@@ -39,7 +39,7 @@ public class DuckExceptionsHandler {
                 LocalDateTime.now(),
                 request.getRequestURI(),
                 HttpStatus.CONFLICT.value(),
-                List.of()
+                errors
         );
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(apiErrorResponse);
@@ -65,7 +65,7 @@ public class DuckExceptionsHandler {
                 LocalDateTime.now(),
                 request.getRequestURI(),
                 HttpStatus.NOT_FOUND.value(),
-                List.of()
+                errors
         );
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiErrorResponse);
@@ -90,7 +90,7 @@ public class DuckExceptionsHandler {
                 LocalDateTime.now(),
                 request.getRequestURI(),
                 HttpStatus.CONFLICT.value(),
-                List.of()
+                errors
         );
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(apiErrorResponse);

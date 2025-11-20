@@ -3,8 +3,6 @@ package com.fredrik.enterprice_backend.user.service;
 import com.fredrik.enterprice_backend.user.dto.createDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.responseDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.updateDuckDTO;
-import lombok.AllArgsConstructor;
-
 import java.util.List;
 
 

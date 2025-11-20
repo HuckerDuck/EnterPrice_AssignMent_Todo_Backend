@@ -64,13 +64,13 @@ public class Duck {
     //? This is so that I can in the future disable a account
     //? Without having to actually drop (remove it) from the databae
     @Column(name = "account_non_expired", nullable = false)
-    private boolean AccountNonExpired = true;
+    private boolean accountNonExpired = true;
 
     @Column(name = "account_non_locked", nullable = false)
-    private boolean AccountNonLocked = true;
+    private boolean accountNonLocked = true;
 
     @Column(name = "credentials_non_expired", nullable = false)
-    private boolean CredentialsNonExpired = true;
+    private boolean credentialsNonExpired = true;
 
     @Column(name = "enabled", nullable = false)
     private boolean enabled = true;

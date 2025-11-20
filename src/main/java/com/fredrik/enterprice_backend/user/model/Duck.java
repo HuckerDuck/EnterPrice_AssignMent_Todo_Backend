@@ -58,8 +58,11 @@ public class Duck {
 
     //? This is so that I can in the future disable a account
     //? Without having to actually drop (remove it) from the databae
-    @Column(nullable = false)
-    private Boolean enabled = true;
+    @Column(unique = true, nullable = false)
+    private boolean isAccountNonExpired;
+    private boolean isAccountNonLocked;
+    private boolean isCredentialsNonExpired;
+    private boolean enabled;
 
     //? This shouldn't really be needed but just in case enabled or duckroles
     //? Is empty then I want enable to be true and duckRoles to be of an admin
@@ -69,9 +72,7 @@ public class Duck {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = this.createdAt;
 
-        if(enabled == null){
-            this.enabled = true;
-        }
+
 
         if(duckRoles == null){
             this.duckRoles = DuckRoles.USER;

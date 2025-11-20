@@ -34,11 +34,29 @@ public class DuckServiceImpl implements DuckService{
     //?
     @Override
     public responseDuckDTO createDuck(createDuckDTO createDuckDTO) {
+        // === DEBUG START ===
+        System.out.println("==========================================");
+        System.out.println("DEBUG: createDuck called!");
+        System.out.println("Username: " + createDuckDTO.username());
+        System.out.println("Password: " + createDuckDTO.password());
+        System.out.println("Email: " + createDuckDTO.email());
+        System.out.println("==========================================");
+        // === DEBUG END ===
+
         //? Use the mapper to convert from a DTO -> Entity
         Duck duck = duckMapper.toEntity(createDuckDTO);
 
+        System.out.println("Step 3: About to encode password...");
+
+        System.out.println("Step 3: Duck password before encode is: " + duck.getPassword());
+
+
         //? Use the encoder and decrypt the password
-        duck.setPassword(passwordEncoder.encode(duck.getPassword()));
+        String encodedPassword = passwordEncoder.encode(createDuckDTO.password());
+        System.out.println("Step 3: Password encoded successfully!");
+
+        duck.setPassword(encodedPassword);
+        System.out.println("Step 3: Password set on duck");
 
         //? Save the entity (aka Duck) to the database
         Duck savedDuck = duckRepository.save(duck);

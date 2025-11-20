@@ -45,7 +45,7 @@ public class Duck {
    //? Hey u, this is an Enum field so I want you to save it like that
    @Enumerated(EnumType.STRING)
    @Column(nullable = false)
-   private DuckRoles duckRoles = DuckRoles.USER;
+   private DuckRoles duckRoles = DuckRoles.ADMIN;
 
     //? You can't change the created_at when the user has been created
     @Setter(AccessLevel.NONE)
@@ -86,7 +86,7 @@ public class Duck {
 
 
         if(duckRoles == null){
-            this.duckRoles = DuckRoles.USER;
+            this.duckRoles = DuckRoles.ADMIN;
         }
     }
 

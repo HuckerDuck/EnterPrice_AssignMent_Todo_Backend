@@ -18,7 +18,7 @@ import java.util.UUID;
 @Entity
 
 
-@Table(name="users")
+@Table(name="ducks")
 public class Duck {
    @Id
    @GeneratedValue(strategy = GenerationType.UUID)
@@ -56,12 +56,23 @@ public class Duck {
     @Column(name="updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    //! Removing the is{text}
+    //! Lombok will automaticly when getting a boolean add the
+    //! Is, so if there is a is in the name it might be a double is
+    //! Or just ignore the is
+
     //? This is so that I can in the future disable a account
     //? Without having to actually drop (remove it) from the databae
-    @Column(nullable = false)
-    private boolean isAccountNonExpired = true;
-    private boolean isAccountNonLocked = true;
-    private boolean isCredentialsNonExpired = true;
+    @Column(name = "account_non_expired", nullable = false)
+    private boolean AccountNonExpired = true;
+
+    @Column(name = "account_non_locked", nullable = false)
+    private boolean AccountNonLocked = true;
+
+    @Column(name = "credentials_non_expired", nullable = false)
+    private boolean CredentialsNonExpired = true;
+
+    @Column(name = "enabled", nullable = false)
     private boolean enabled = true;
 
     //? This shouldn't really be needed but just in case enabled or duckroles

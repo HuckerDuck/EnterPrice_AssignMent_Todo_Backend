@@ -28,7 +28,7 @@ public class DuckController {
     @GetMapping ("/username/{username}")
     public ResponseEntity<responseDuckDTO> findDuckByUsername(
             @PathVariable String username){
-        responseDuckDTO foundDuck = duckService.findDuckByUsername(username);
+        responseDuckDTO foundDuck = duckService.findDuckByUserName(username);
         return ResponseEntity.ok(foundDuck);
     }
 

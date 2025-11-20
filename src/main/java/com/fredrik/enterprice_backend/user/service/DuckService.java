@@ -14,8 +14,6 @@ public interface DuckService {
     //? Find a Duck by username get back a responseDTO
     responseDuckDTO findDuckByUserName(String username);
 
-    responseDuckDTO findDuckByUserName(UUID id);
-
     //? Find a Duck by email get back a responseDTO
     responseDuckDTO findDuckByEmail(String email);
 

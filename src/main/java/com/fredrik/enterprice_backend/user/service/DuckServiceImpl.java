@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -86,16 +85,6 @@ public class DuckServiceImpl implements DuckService{
     //?               --- Find a Duck by ID ---
     //?
 
-
-
-    @Override
-    public responseDuckDTO findDuckByUserName(UUID id) {
-        Duck duck = duckRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("User not found with id: " + id + "Was not found")
-                );
-
-        return duckMapper.toResponseDTO(duck);
-    }
 
     //?
     //?                     --- Find a Duck by Email ---

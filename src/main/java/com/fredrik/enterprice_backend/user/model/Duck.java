@@ -23,7 +23,7 @@ public class Duck {
    @Id
    @GeneratedValue(strategy = GenerationType.UUID)
    //! Making sure that nowone can set or get the ID
-   @Getter(AccessLevel.NONE)
+
    @Setter(AccessLevel.NONE)
    //! It's a UUID for security and it's also longer
    //! Unlike LONG id this will not go 1,2,3
@@ -58,11 +58,11 @@ public class Duck {
 
     //? This is so that I can in the future disable a account
     //? Without having to actually drop (remove it) from the databae
-    @Column(unique = true, nullable = false)
-    private boolean isAccountNonExpired;
-    private boolean isAccountNonLocked;
-    private boolean isCredentialsNonExpired;
-    private boolean enabled;
+    @Column(nullable = false)
+    private boolean isAccountNonExpired = true;
+    private boolean isAccountNonLocked = true;
+    private boolean isCredentialsNonExpired = true;
+    private boolean enabled = true;
 
     //? This shouldn't really be needed but just in case enabled or duckroles
     //? Is empty then I want enable to be true and duckRoles to be of an admin
@@ -84,6 +84,7 @@ public class Duck {
     void onUpdatingADuck(){
         this.updatedAt = LocalDateTime.now();
     }
+
 
 
 

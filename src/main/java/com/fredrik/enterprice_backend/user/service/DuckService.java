@@ -4,6 +4,7 @@ import com.fredrik.enterprice_backend.user.dto.createDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.responseDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.updateDuckDTO;
 import java.util.List;
+import java.util.UUID;
 
 
 public interface DuckService {
@@ -11,7 +12,9 @@ public interface DuckService {
     responseDuckDTO createDuck(createDuckDTO createDuckDTO);
 
     //? Find a Duck by username get back a responseDTO
-    responseDuckDTO findDuckByUsername(String username);
+    responseDuckDTO findDuckByUserName(String username);
+
+    responseDuckDTO findDuckByUserName(UUID id);
 
     //? Find a Duck by email get back a responseDTO
     responseDuckDTO findDuckByEmail(String email);

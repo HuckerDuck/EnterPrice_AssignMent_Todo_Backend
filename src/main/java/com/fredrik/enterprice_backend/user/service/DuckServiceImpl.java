@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -55,9 +56,24 @@ public class DuckServiceImpl implements DuckService{
     //?
 
     @Override
-    public responseDuckDTO findDuckByUsername(String username) {
+    public responseDuckDTO findDuckByUserName(String username) {
         Duck duck = duckRepository.findByUsername(username)
                 .orElseThrow(()-> new RuntimeException("User not found with username: " + username + "Was not found")
+                );
+
+        return duckMapper.toResponseDTO(duck);
+    }
+
+    //?
+    //?               --- Find a Duck by ID ---
+    //?
+
+
+
+    @Override
+    public responseDuckDTO findDuckByUserName(UUID id) {
+        Duck duck = duckRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("User not found with id: " + id + "Was not found")
                 );
 
         return duckMapper.toResponseDTO(duck);
@@ -82,7 +98,20 @@ public class DuckServiceImpl implements DuckService{
 
     @Override
     public responseDuckDTO updateDuck(updateDuckDTO updateDuckDTO) {
-        return null;
+        //? Se if you can find the Duck by username
+        //? If you can't then throw an exception
+        Duck duck = duckRepository.findByUsername(updateDuckDTO.username())
+                .orElseThrow(() ->new RuntimeException
+                        ("User not found with username: " + updateDuckDTO.username() + "Was not found"));
+
+        //? Use the mapper to convert from a DTO -> Entity
+        duckMapper.updateDuckFromDTO(updateDuckDTO, duck);
+
+
+        //? Save the entity (aka Duck) to the database
+        duckRepository.save(duck);
+
+        return duckMapper.toResponseDTO(duck);
     }
 
     //?
@@ -91,7 +120,12 @@ public class DuckServiceImpl implements DuckService{
 
     @Override
     public void disableDuck(String username) {
+        Duck duck = duckRepository.findByUsername(username)
+                .orElseThrow(()-> new RuntimeException("User not found with username: " + username + "Was not found")
+                );
 
+        duck.setEnabled(false);
+        duckRepository.save(duck);
     }
 
 
@@ -101,6 +135,11 @@ public class DuckServiceImpl implements DuckService{
 
     @Override
     public List<responseDuckDTO> getAllDucks() {
-        return List.of();
+
+       List<Duck> ducks = duckRepository.findAll();
+
+       return ducks.stream()
+               .map(duckMapper::toResponseDTO)
+               .toList();
     }
 }

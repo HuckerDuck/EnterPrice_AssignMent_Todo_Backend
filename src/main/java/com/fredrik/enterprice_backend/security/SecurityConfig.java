@@ -17,6 +17,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         //? Allow people to register on the api
                         .requestMatchers("/api/ducks/register").permitAll()
+                        .requestMatchers("/api/ducks").permitAll()
+                        .requestMatchers("/api/ducks/**").permitAll()
                         //? Rest is gonna require authentication
                         //? = that someone is logged in
                         .anyRequest().authenticated()

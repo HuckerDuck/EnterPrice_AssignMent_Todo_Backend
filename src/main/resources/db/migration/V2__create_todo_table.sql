@@ -1,4 +1,4 @@
-CREATE TABLE todos (
+CREATE TABLE IF NOT EXISTS duck_task(
                        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                        title VARCHAR(255) NOT NULL,
                        description TEXT,
@@ -9,11 +9,11 @@ CREATE TABLE todos (
                        duck_id UUID NOT NULL,
 
 
-                       CONSTRAINT fk_todos_duck
+                       CONSTRAINT fk_duck_task_duck
                            FOREIGN KEY (duck_id)
                                REFERENCES ducks(id)
                                -- When a User is deleted,
-                               -- all of his Todos should be deleted as well
+                               -- all of his DuckTask aka Todos should be deleted as well
                                ON DELETE CASCADE
 );
 
@@ -21,6 +21,7 @@ CREATE TABLE todos (
 -- Making the search faster for the thing the user would probably search for
 -- Making not really needed for a small project like this but
 -- As it grows, it will be very useful
-CREATE INDEX idx_todos_duck_id ON todos (duck_id);
-CREATE INDEX idx_todos_title ON todos (priority);
-CREATE INDEX idx_todos_completed ON todos (completed);
+-- But I like to have it has a habit for future projects
+CREATE INDEX idx_todos_duck_id ON duck_task (duck_id);
+CREATE INDEX idx_todos_title ON duck_task (priority);
+CREATE INDEX idx_todos_completed ON duck_task (completed);

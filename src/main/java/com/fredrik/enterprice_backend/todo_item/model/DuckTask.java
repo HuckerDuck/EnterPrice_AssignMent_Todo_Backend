@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,10 +16,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name="todos")
+@Table(name="DuckTask")
 @NoArgsConstructor
 @AllArgsConstructor
-public class ToDo {
+public class DuckTask {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -36,6 +37,14 @@ public class ToDo {
 
     private Boolean completed;
 
+    // @UpdateTimeStampe is used so that automaticly sets the time
+    // when the object is updated
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    // @CreateTimeStamp is used so that automaticly sets the time
+    // when the object is created
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
@@ -46,8 +55,11 @@ public class ToDo {
     @JoinColumn(name = "duck_id", nullable = false)
     private Duck duck;
 
-    @PreUpdate
-    void onUpdatingATodo(){
+
+
+    @PrePersist
+    void onCreatingATodo(){
         this.createdAt = LocalDateTime.now();
+        this.completed = false;
     }
 }

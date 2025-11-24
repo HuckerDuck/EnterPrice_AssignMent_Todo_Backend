@@ -3,10 +3,7 @@ package com.fredrik.enterprice_backend.todo_item.model;
 import com.fredrik.enterprice_backend.todo_item.emums.ToDoPriority;
 import com.fredrik.enterprice_backend.user.model.Duck;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -22,6 +19,7 @@ import java.util.UUID;
 public class DuckTask {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter(AccessLevel.NONE)
     private UUID id;
 
     @Column(nullable = false)
@@ -35,7 +33,8 @@ public class DuckTask {
     private ToDoPriority priority;
 
 
-    private Boolean completed;
+    @Column(nullable = false)
+    private Boolean completed = false;
 
     // @UpdateTimeStampe is used so that automaticly sets the time
     // when the object is updated
@@ -54,12 +53,4 @@ public class DuckTask {
     //? This will try to connect each TODO to a duck onto it's ID
     @JoinColumn(name = "duck_id", nullable = false)
     private Duck duck;
-
-
-
-    @PrePersist
-    void onCreatingATodo(){
-        this.createdAt = LocalDateTime.now();
-        this.completed = false;
-    }
 }

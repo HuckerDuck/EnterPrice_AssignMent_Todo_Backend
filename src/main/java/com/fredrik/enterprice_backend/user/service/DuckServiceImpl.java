@@ -3,9 +3,8 @@ package com.fredrik.enterprice_backend.user.service;
 import com.fredrik.enterprice_backend.user.dto.createDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.responseDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.updateDuckDTO;
-
 import com.fredrik.enterprice_backend.user.exceptions.EmailAlreadyExistException;
-import com.fredrik.enterprice_backend.user.exceptions.UserAlreadyExistsException;
+import com.fredrik.enterprice_backend.user.exceptions.DuckAlreadyExistsException;
 import com.fredrik.enterprice_backend.user.mapper.DuckMapper;
 import com.fredrik.enterprice_backend.user.model.Duck;
 import com.fredrik.enterprice_backend.user.repository.DuckRepository;
@@ -39,7 +38,7 @@ public class DuckServiceImpl implements DuckService{
 
         //? Check if the username is unique
         if (duckRepository.findByUsername(username).isPresent()){
-            throw new UserAlreadyExistsException(createDuckDTO.username());
+            throw new DuckAlreadyExistsException(createDuckDTO.username());
         }
 
         //? Check if the email is unique
@@ -60,8 +59,8 @@ public class DuckServiceImpl implements DuckService{
 
 
         duck.setPassword(encodedPassword);
-
-
+        //? Setting the duck to be automaticly disabled from the start
+        duck.setEnabled(false);
         //? Save the entity (aka Duck) to the database
         Duck savedDuck = duckRepository.save(duck);
 

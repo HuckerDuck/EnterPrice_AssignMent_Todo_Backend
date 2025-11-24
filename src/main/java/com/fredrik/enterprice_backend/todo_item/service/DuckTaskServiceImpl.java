@@ -3,9 +3,13 @@ package com.fredrik.enterprice_backend.todo_item.service;
 import com.fredrik.enterprice_backend.todo_item.dto.CreateDuckTaskDTO;
 import com.fredrik.enterprice_backend.todo_item.dto.ResponseDuckTaskDTO;
 import com.fredrik.enterprice_backend.todo_item.dto.UpdateDuckTaskDTO;
+import com.fredrik.enterprice_backend.todo_item.exceptions.DuckNotLoggedInException;
+import com.fredrik.enterprice_backend.todo_item.exceptions.DuckTaskNotAuthException;
+import com.fredrik.enterprice_backend.todo_item.exceptions.DuckTaskNotFoundException;
 import com.fredrik.enterprice_backend.todo_item.mapper.DuckTaskMapper;
 import com.fredrik.enterprice_backend.todo_item.model.DuckTask;
 import com.fredrik.enterprice_backend.todo_item.repository.DuckTaskRepository;
+import com.fredrik.enterprice_backend.user.exceptions.DuckNotFoundException;
 import com.fredrik.enterprice_backend.user.model.Duck;
 import com.fredrik.enterprice_backend.user.repository.DuckRepository;
 import jakarta.transaction.Transactional;
@@ -29,9 +33,6 @@ public class DuckTaskServiceImpl implements DuckTaskService{
 
     @Override
     public ResponseDuckTaskDTO createDuckTask(CreateDuckTaskDTO createDuckTaskDTO) {
-        System.out.println("SERVICE CALLED");
-        System.out.println("About to get current duck...");
-
         //? Get the current duck from the SecurityContext
         Duck currentDuck = getCurrentDuck();
 
@@ -67,10 +68,10 @@ public class DuckTaskServiceImpl implements DuckTaskService{
         Duck currentDuck = getCurrentDuck();
 
         DuckTask duckTask = duckTaskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("DuckTask not found with id: " + id));
+                .orElseThrow(() -> new DuckTaskNotFoundException(id));
 
         if (!duckTask.getDuck().equals(currentDuck)){
-            throw new RuntimeException("You are not allowed to delete this DuckTask");
+            throw new DuckTaskNotAuthException("delete");
         }
 
         duckTaskRepository.deleteById(id);
@@ -82,10 +83,10 @@ public class DuckTaskServiceImpl implements DuckTaskService{
         Duck currentDuck = getCurrentDuck();
 
         DuckTask duckTask = duckTaskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("DuckTask not found with id: " + id));
+                .orElseThrow(() -> new DuckTaskNotFoundException(id));
 
         if (!duckTask.getDuck().equals(currentDuck)){
-            throw new RuntimeException("You are not allowed to update this DuckTask");
+            throw new DuckTaskNotAuthException("update");
         }
 
         //? Update the DuckTask with the new values
@@ -116,7 +117,7 @@ public class DuckTaskServiceImpl implements DuckTaskService{
         Duck currentDuck = getCurrentDuck();
 
         DuckTask duckTask = duckTaskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("DuckTask not found with id: " + id));
+                .orElseThrow(() -> new DuckTaskNotFoundException(id));
 
         if (!duckTask.getDuck().equals(currentDuck)){
             throw new RuntimeException("You are not allowed to mark this DuckTask as completed");
@@ -130,21 +131,19 @@ public class DuckTaskServiceImpl implements DuckTaskService{
     //? Helping method from the SecurityContext
     //? Gonna find and see if a user is logged in or not
     private Duck getCurrentDuck(){
-        System.out.println("=== GET CURRENT DUCK CALLED ===");
 
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("Authentication: " + authentication);
-        System.out.println("Is authenticated: " + (authentication != null ? authentication.isAuthenticated() : "null"));
+
 
 
         if (authentication == null || authentication.getName() == null){
-            throw new RuntimeException("User is not logged in");
+            throw new DuckNotLoggedInException();
         }
 
         String username = authentication.getName();
-        System.out.println("Username from auth: " + username);
+
         return duckRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+                .orElseThrow(() -> new DuckNotFoundException(username));
     }
 }

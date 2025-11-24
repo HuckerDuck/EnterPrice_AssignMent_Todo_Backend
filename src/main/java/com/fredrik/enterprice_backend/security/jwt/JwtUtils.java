@@ -74,6 +74,7 @@ public class JwtUtils {
     // Get the username from JWT token
     public String getUsernameFromJwtToken(String token) {
         try {
+            System.out.println("Got the Username from JWT");
             Claims claims = Jwts.parser()
                     .verifyWith(getSigningKey())
                     .build()
@@ -85,6 +86,8 @@ public class JwtUtils {
             return username;
 
         } catch (Exception e) {
+            System.out.println("FAIL: It didn't get to extract username!");
+            System.out.println("Message: " + e.getMessage());
             logger.warn("Failed to extract username from token: {}", e.getMessage());
             return null;
         }

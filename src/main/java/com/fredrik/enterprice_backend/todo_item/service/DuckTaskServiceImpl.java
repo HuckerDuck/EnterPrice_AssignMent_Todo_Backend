@@ -29,6 +29,9 @@ public class DuckTaskServiceImpl implements DuckTaskService{
 
     @Override
     public ResponseDuckTaskDTO createDuckTask(CreateDuckTaskDTO createDuckTaskDTO) {
+        System.out.println("SERVICE CALLED");
+        System.out.println("About to get current duck...");
+
         //? Get the current duck from the SecurityContext
         Duck currentDuck = getCurrentDuck();
 
@@ -127,13 +130,20 @@ public class DuckTaskServiceImpl implements DuckTaskService{
     //? Helping method from the SecurityContext
     //? Gonna find and see if a user is logged in or not
     private Duck getCurrentDuck(){
+        System.out.println("=== GET CURRENT DUCK CALLED ===");
+
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Authentication: " + authentication);
+        System.out.println("Is authenticated: " + (authentication != null ? authentication.isAuthenticated() : "null"));
+
 
         if (authentication == null || authentication.getName() == null){
             throw new RuntimeException("User is not logged in");
         }
 
         String username = authentication.getName();
+        System.out.println("Username from auth: " + username);
         return duckRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
     }

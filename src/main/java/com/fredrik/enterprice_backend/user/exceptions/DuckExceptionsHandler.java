@@ -17,9 +17,9 @@ import java.util.List;
 public class DuckExceptionsHandler {
     private static final Logger logger = LoggerFactory.getLogger(DuckExceptionsHandler.class);
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ExceptionHandler(DuckAlreadyExistsException.class)
     public ResponseEntity<ApiErrorResponse> handleUserAlreadyExists(
-            UserAlreadyExistsException exception,
+            DuckAlreadyExistsException exception,
             HttpServletRequest request) {
 
         logger.warn("User Already exists error: {}",exception.getMessage());
@@ -31,10 +31,6 @@ public class DuckExceptionsHandler {
                 )
         );
 
-
-
-
-
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
                 LocalDateTime.now(),
                 request.getRequestURI(),
@@ -43,13 +39,11 @@ public class DuckExceptionsHandler {
         );
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(apiErrorResponse);
-
-
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(DuckNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleUserNotFound(
-            UserNotFoundException exception,
+            DuckNotFoundException exception,
             HttpServletRequest request
     ){
         logger.warn("User was not found with error: {}", exception.getMessage());

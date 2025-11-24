@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface DuckTaskRepository extends JpaRepository<DuckTask, UUID> {
-    List<DuckTask> findAllByUserId(UUID userId);
+    List<DuckTask> findAllByDuckId(UUID duckId);
 }

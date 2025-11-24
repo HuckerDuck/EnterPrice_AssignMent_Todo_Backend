@@ -1,27 +1,29 @@
 package com.fredrik.enterprice_backend.todo_item.service;
 
 import com.fredrik.enterprice_backend.todo_item.dto.CreateDuckTaskDTO;
+import com.fredrik.enterprice_backend.todo_item.dto.ResponseDuckTaskDTO;
+import com.fredrik.enterprice_backend.todo_item.dto.UpdateDuckTaskDTO;
 import com.fredrik.enterprice_backend.user.dto.responseDuckDTO;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface DuckTaskService {
     //? Create a a new Ducktask
     // Get back a responseDTO
-    responseDuckDTO createDuckTask(CreateDuckTaskDTO createDuckTaskDTO);
+    ResponseDuckTaskDTO createDuckTask(CreateDuckTaskDTO createDuckTaskDTO);
 
     //? Find a Ducktask by id
-    responseDuckDTO findDuckTaskById(UUID id);
+    ResponseDuckTaskDTO findDuckTaskById(UUID id);
 
     //? Delete a Ducktask by id
     void deleteDuckTaskById(UUID id);
 
-    //? Update a Ducktask by id
-    responseDuckDTO updateDuckTaskById(UUID id, CreateDuckTaskDTO createDuckTaskDTO);
+    ResponseDuckTaskDTO updateDuckTaskById(UUID id, UpdateDuckTaskDTO updateDuckTaskDTO);
 
     //? Find all Ducktasks by DuckId
-    responseDuckDTO findAllTaskByCurrentDuck(UUID duckId);
+    List<ResponseDuckTaskDTO> findAllTaskByCurrentDuck();
 
     //? Mark a Ducktask as completed
-    responseDuckDTO markDuckTaskAsCompleted(UUID id);
+    ResponseDuckTaskDTO markDuckTaskAsCompleted(UUID id);
 }

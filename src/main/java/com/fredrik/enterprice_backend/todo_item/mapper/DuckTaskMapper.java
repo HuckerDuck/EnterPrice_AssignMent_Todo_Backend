@@ -4,10 +4,7 @@ import com.fredrik.enterprice_backend.todo_item.dto.CreateDuckTaskDTO;
 import com.fredrik.enterprice_backend.todo_item.dto.ResponseDuckTaskDTO;
 import com.fredrik.enterprice_backend.todo_item.model.DuckTask;
 import com.fredrik.enterprice_backend.user.model.Duck;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Context;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 @Mapper (componentModel = "spring")
 public interface DuckTaskMapper {
@@ -24,7 +21,7 @@ public interface DuckTaskMapper {
     //? This is to make sure that it's saved to the database and to
     //? The correct Duck
     @AfterMapping
-    default void setDuck(DuckTask duckTask, @Context Duck duck){
+    default void setDuck(@MappingTarget DuckTask duckTask, @Context Duck duck){
         duckTask.setDuck(duck);
     }
 }

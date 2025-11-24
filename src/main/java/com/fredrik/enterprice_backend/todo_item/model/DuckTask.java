@@ -33,7 +33,8 @@ public class DuckTask {
     private ToDoPriority priority;
 
 
-    private Boolean completed;
+    @Column(nullable = false)
+    private Boolean completed = false;
 
     // @UpdateTimeStampe is used so that automaticly sets the time
     // when the object is updated

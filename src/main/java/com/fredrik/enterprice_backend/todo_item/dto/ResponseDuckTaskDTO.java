@@ -1,5 +1,7 @@
 package com.fredrik.enterprice_backend.todo_item.dto;
 
+import com.fredrik.enterprice_backend.todo_item.emums.ToDoPriority;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 

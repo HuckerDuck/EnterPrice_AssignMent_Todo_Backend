@@ -51,8 +51,8 @@ public class DuckTaskController {
     }
 
     //? 4 - Update a specific task by id
-    //? Put -> /api/tasks/{id}
-    @PutMapping("/{id}")
+    //? Put -> /api/ducktasks/update/{id}
+    @PutMapping("/update/{id}")
     public ResponseEntity <ResponseDuckTaskDTO> updateTaskById(
             @PathVariable UUID id,
             @Valid @RequestBody UpdateDuckTaskDTO updateDuckTaskDTO
@@ -63,7 +63,7 @@ public class DuckTaskController {
 
     //? 5 - Delete a specific task by id
     //? Delete -> /api/tasks/{id}
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteTaskById(@PathVariable UUID id){
         duckTaskService.deleteDuckTaskById(id);
         return ResponseEntity.noContent().build();
@@ -71,7 +71,7 @@ public class DuckTaskController {
 
     //? 6 - Mark a specific task as completed
     //? Put -> /api/tasks/{id}/complete
-    @PatchMapping("/{id}/complete")
+    @PatchMapping("/completedtask/{id}")
     public ResponseEntity<ResponseDuckTaskDTO> markTaskAsCompleted(
             @PathVariable UUID id){
         ResponseDuckTaskDTO completedTask = duckTaskService.markDuckTaskAsCompleted(id);

@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="EnterPriceBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <envs>
+      <env name="DB_HOST" value="db.jlscbksexclbuuauegmu.supabase.co" />
+      <env name="DB_PASSWORD" value="!92GTX3080" />
+      <env name="DB_PORT" value="5432" />
+      <env name="DB_USERNAME" value="postgres" />
+      <env name="JWT_SECRET" value="5TXMjJlvWWSbMnILSycBJ6OY7Wkmpf1Ihmmo/FTkD9M=" />
+      <env name="DB_NAME" value="postgres" />
+    </envs>
+    <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+    <module name="EnterPrice_Backend.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.fredrik.enterprice_backend.EnterPriceBackendApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

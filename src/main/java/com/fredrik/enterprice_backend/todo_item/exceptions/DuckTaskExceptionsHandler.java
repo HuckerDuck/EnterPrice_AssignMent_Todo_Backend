@@ -43,7 +43,7 @@ public class DuckTaskExceptionsHandler {
     }
 
     //? Not Allowed to change the DuckTask
-    @ExceptionHandler(DuckNotLoggedInException.class)
+    @ExceptionHandler(DuckTaskNotAuthException.class)
     public ResponseEntity<ApiErrorResponse> notAllowedToChangeTask(
             DuckTaskNotAuthException exception,
             HttpServletRequest request) {
@@ -68,7 +68,7 @@ public class DuckTaskExceptionsHandler {
     }
 
     //? Can't find the DuckTask that the user was looking for
-    @ExceptionHandler(DuckNotLoggedInException.class)
+    @ExceptionHandler(DuckTaskNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> couldNotFindTask(
             DuckTaskNotFoundException exception,
             HttpServletRequest request) {

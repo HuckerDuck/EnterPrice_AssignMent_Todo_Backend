@@ -43,27 +43,7 @@ public class AuthController {
                 )
         );
 
-        //? For the Debug
-        System.out.println(authentication.getAuthorities());
-        System.out.println("Class " + authentication.getClass());
-
         Object principal = authentication.getPrincipal();
-
-        if (principal instanceof DuckDetails duckDetails) {
-            System.out.println();
-            System.out.println();
-            System.out.println("The Duck is: " + duckDetails.getUsername());
-            System.out.println("He has the right to: " + duckDetails.getAuthorities());
-            System.out.println("  Is Accout Locked? " + duckDetails.isAccountNonLocked());
-            System.out.println("  Is Account Enabled " + duckDetails.isEnabled());
-            System.out.println("  Is Account Expired? " + duckDetails.isAccountNonExpired());
-            System.out.println("  Is Credentials Expired? " + duckDetails.isCredentialsNonExpired());
-            System.out.println("  Is the Password hashed? " + duckDetails.getPassword());
-            System.out.println();
-            System.out.println();
-        } else {
-            System.out.println("Principal Value" + principal);
-        }
 
         DuckDetails duckDetails = (DuckDetails) authentication.getPrincipal();
         Duck duck = duckDetails.getDuck();
@@ -93,6 +73,5 @@ public class AuthController {
 
 
                 ));
-
     }
     }

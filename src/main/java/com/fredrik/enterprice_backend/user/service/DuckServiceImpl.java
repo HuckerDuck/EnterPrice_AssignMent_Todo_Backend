@@ -1,26 +1,28 @@
 package com.fredrik.enterprice_backend.user.service;
 
+import com.fredrik.enterprice_backend.config.RabbitConfig;
 import com.fredrik.enterprice_backend.user.dto.createDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.responseDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.updateDuckDTO;
-import com.fredrik.enterprice_backend.user.duckdetails_aka_userdetails.DuckDetailsService;
+import com.fredrik.enterprice_backend.user.exceptions.DuckNotFoundException;
+import com.fredrik.enterprice_backend.user.exceptions.EmailAlreadyExistException;
+import com.fredrik.enterprice_backend.user.exceptions.DuckAlreadyExistsException;
 import com.fredrik.enterprice_backend.user.mapper.DuckMapper;
 import com.fredrik.enterprice_backend.user.model.Duck;
 import com.fredrik.enterprice_backend.user.repository.DuckRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class DuckServiceImpl implements DuckService{
     private final DuckRepository duckRepository;
-    private final DuckDetailsService duckDetailsService;
     private final DuckMapper duckMapper;
+    private final RabbitTemplate rabbitTemplate;
 
     // This will work in a way where it will tell Spring
     // To scan for password encoder, then it will go into
@@ -35,14 +37,18 @@ public class DuckServiceImpl implements DuckService{
     //?
     @Override
     public responseDuckDTO createDuck(createDuckDTO createDuckDTO) {
-        // === DEBUG START ===
-        System.out.println("==========================================");
-        System.out.println("DEBUG: createDuck called!");
-        System.out.println("Username: " + createDuckDTO.username());
-        System.out.println("Password: " + createDuckDTO.password());
-        System.out.println("Email: " + createDuckDTO.email());
-        System.out.println("==========================================");
-        // === DEBUG END ===
+        String username = createDuckDTO.username().trim();
+        String email = createDuckDTO.email().trim();
+
+        //? Check if the username is unique
+        if (duckRepository.findByUsername(username).isPresent()){
+            throw new DuckAlreadyExistsException(createDuckDTO.username());
+        }
+
+        //? Check if the email is unique
+        if (duckRepository.findByEmail(email).isPresent()){
+            throw new EmailAlreadyExistException(createDuckDTO.email());
+        }
 
         //? Use the mapper to convert from a DTO -> Entity
         Duck duck = duckMapper.toEntity(createDuckDTO);
@@ -54,13 +60,28 @@ public class DuckServiceImpl implements DuckService{
 
         //? Use the encoder and decrypt the password
         String encodedPassword = passwordEncoder.encode(createDuckDTO.password());
-        System.out.println("Step 3: Password encoded successfully!");
+
 
         duck.setPassword(encodedPassword);
-        System.out.println("Step 3: Password set on duck");
-
+        //? Setting the duck to be automaticly disabled from the start
+        duck.setEnabled(false);
         //? Save the entity (aka Duck) to the database
         Duck savedDuck = duckRepository.save(duck);
+
+        //? Tries to send a message to RabbitMQ
+        //? If it fails then it will print the error message
+        //? If it succeeds then it will print the message
+        //? Then I can check in RabbitMQ to see if it was sent
+        try {
+            String message = "New Duck added: " + savedDuck.getUsername();
+            rabbitTemplate.convertAndSend(
+                    RabbitConfig.EXCHANGE_NAME,
+                    RabbitConfig.ROUTING_KEY,
+                    message
+            );
+        } catch (Exception e) {
+            System.err.println("RabbitMQ failed: " + e.getMessage());
+        }
 
         //? Use the mapper to convert from an Entity -> DTO
         //? For security reason we use the responseDTO to return what is
@@ -77,21 +98,6 @@ public class DuckServiceImpl implements DuckService{
     public responseDuckDTO findDuckByUserName(String username) {
         Duck duck = duckRepository.findByUsername(username)
                 .orElseThrow(()-> new RuntimeException("User not found with username: " + username + "Was not found")
-                );
-
-        return duckMapper.toResponseDTO(duck);
-    }
-
-    //?
-    //?               --- Find a Duck by ID ---
-    //?
-
-
-
-    @Override
-    public responseDuckDTO findDuckByUserName(UUID id) {
-        Duck duck = duckRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("User not found with id: " + id + "Was not found")
                 );
 
         return duckMapper.toResponseDTO(duck);
@@ -139,7 +145,7 @@ public class DuckServiceImpl implements DuckService{
     @Override
     public void disableDuck(String username) {
         Duck duck = duckRepository.findByUsername(username)
-                .orElseThrow(()-> new RuntimeException("User not found with username: " + username + "Was not found")
+                .orElseThrow(()-> new DuckNotFoundException(username)
                 );
 
         duck.setEnabled(false);
@@ -160,4 +166,21 @@ public class DuckServiceImpl implements DuckService{
                .map(duckMapper::toResponseDTO)
                .toList();
     }
+
+    //?
+    //?                --- Enable a Duck ---
+    //?
+
+    @Override
+    public void enableDuck(String username){
+        Duck duck = duckRepository.findByUsername(username)
+                .orElseThrow(()-> new DuckNotFoundException(username)
+                );
+
+        duck.setEnabled(true);
+        duckRepository.save(duck);
+
+        System.out.println("A duck by the name of: " + username + " has been enabled");
+    }
+
 }

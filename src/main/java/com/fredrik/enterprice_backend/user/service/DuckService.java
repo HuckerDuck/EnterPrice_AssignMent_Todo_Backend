@@ -3,7 +3,6 @@ package com.fredrik.enterprice_backend.user.service;
 import com.fredrik.enterprice_backend.user.dto.createDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.responseDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.updateDuckDTO;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -14,8 +13,6 @@ public interface DuckService {
 
     //? Find a Duck by username get back a responseDTO
     responseDuckDTO findDuckByUserName(String username);
-
-    responseDuckDTO findDuckByUserName(UUID id);
 
     //? Find a Duck by email get back a responseDTO
     responseDuckDTO findDuckByEmail(String email);
@@ -28,6 +25,10 @@ public interface DuckService {
 
     //? Method for getting all ducks in the database
     List<responseDuckDTO> getAllDucks();
+
+    //? Method for Enabling a duck
+    //! This is used since all new ducks are disabled by default
+    void enableDuck(String username);
 
 
 

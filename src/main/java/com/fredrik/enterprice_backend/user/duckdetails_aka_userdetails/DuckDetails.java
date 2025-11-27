@@ -1,6 +1,7 @@
 package com.fredrik.enterprice_backend.user.duckdetails_aka_userdetails;
 
 import com.fredrik.enterprice_backend.user.model.Duck;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,13 +10,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+@Getter
 @RequiredArgsConstructor
 public class DuckDetails implements UserDetails {
     private final Duck duck;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + duck.getDuckRoles().name()));
+        return duck.getDuckRoles().getDuckAuthorities();
     }
 
     @Override

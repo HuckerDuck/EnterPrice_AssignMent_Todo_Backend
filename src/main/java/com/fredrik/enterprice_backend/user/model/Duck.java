@@ -73,7 +73,7 @@ public class Duck {
     private boolean credentialsNonExpired = true;
 
     @Column(name = "enabled", nullable = false)
-    private boolean enabled = true;
+    private boolean enabled = false;
 
     //? This shouldn't really be needed but just in case enabled or duckroles
     //? Is empty then I want enable to be true and duckRoles to be of an admin

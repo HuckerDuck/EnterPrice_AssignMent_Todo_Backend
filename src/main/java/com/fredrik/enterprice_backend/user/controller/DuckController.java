@@ -49,6 +49,16 @@ public class DuckController {
         return ResponseEntity.noContent().build();
     }
 
+    //? Enable a duck
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/enable/{username}")
+    public ResponseEntity<Void> enableDuck(
+            @PathVariable String username){
+        duckService.enableDuck(username);
+        return ResponseEntity.noContent().build();
+    }
+
 
 
 

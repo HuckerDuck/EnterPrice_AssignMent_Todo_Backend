@@ -4,6 +4,7 @@ import com.fredrik.enterprice_backend.config.RabbitConfig;
 import com.fredrik.enterprice_backend.user.dto.createDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.responseDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.updateDuckDTO;
+import com.fredrik.enterprice_backend.user.exceptions.DuckNotFoundException;
 import com.fredrik.enterprice_backend.user.exceptions.EmailAlreadyExistException;
 import com.fredrik.enterprice_backend.user.exceptions.DuckAlreadyExistsException;
 import com.fredrik.enterprice_backend.user.mapper.DuckMapper;
@@ -144,7 +145,7 @@ public class DuckServiceImpl implements DuckService{
     @Override
     public void disableDuck(String username) {
         Duck duck = duckRepository.findByUsername(username)
-                .orElseThrow(()-> new RuntimeException("User not found with username: " + username + "Was not found")
+                .orElseThrow(()-> new DuckNotFoundException(username)
                 );
 
         duck.setEnabled(false);
@@ -165,4 +166,21 @@ public class DuckServiceImpl implements DuckService{
                .map(duckMapper::toResponseDTO)
                .toList();
     }
+
+    //?
+    //?                --- Enable a Duck ---
+    //?
+
+    @Override
+    public void enableDuck(String username){
+        Duck duck = duckRepository.findByUsername(username)
+                .orElseThrow(()-> new DuckNotFoundException(username)
+                );
+
+        duck.setEnabled(true);
+        duckRepository.save(duck);
+
+        System.out.println("A duck by the name of: " + username + " has been enabled");
+    }
+
 }

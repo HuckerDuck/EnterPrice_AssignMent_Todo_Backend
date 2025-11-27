@@ -1,6 +1,7 @@
 package com.fredrik.enterprice_backend.todo_item.model;
 
 import com.fredrik.enterprice_backend.todo_item.emums.ToDoPriority;
+import com.fredrik.enterprice_backend.user.enums.DuckRoles;
 import com.fredrik.enterprice_backend.user.model.Duck;
 import jakarta.persistence.*;
 import lombok.*;
@@ -53,4 +54,10 @@ public class DuckTask {
     //? This will try to connect each TODO to a duck onto it's ID
     @JoinColumn(name = "duck_id", nullable = false)
     private Duck duck;
+
+    @PrePersist
+    void onCreatingADuckTask(){
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = this.createdAt;
+    }
 }

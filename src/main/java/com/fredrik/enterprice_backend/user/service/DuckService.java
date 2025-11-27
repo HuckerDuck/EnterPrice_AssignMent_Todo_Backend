@@ -26,6 +26,10 @@ public interface DuckService {
     //? Method for getting all ducks in the database
     List<responseDuckDTO> getAllDucks();
 
+    //? Method for Enabling a duck
+    //! This is used since all new ducks are disabled by default
+    void enableDuck(String username);
+
 
 
 

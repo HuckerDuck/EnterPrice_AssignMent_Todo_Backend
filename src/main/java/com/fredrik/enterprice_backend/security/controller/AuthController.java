@@ -1,14 +1,19 @@
 package com.fredrik.enterprice_backend.security.controller;
 
 import com.fredrik.enterprice_backend.security.jwt.JwtUtils;
+import com.fredrik.enterprice_backend.user.dto.createDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.loginDuckRequestDTO;
+import com.fredrik.enterprice_backend.user.dto.responseDuckDTO;
 import com.fredrik.enterprice_backend.user.duckdetails_aka_userdetails.DuckDetails;
 import com.fredrik.enterprice_backend.user.model.Duck;
+import com.fredrik.enterprice_backend.user.service.DuckService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +31,8 @@ public class AuthController {
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
+    private final DuckService duckService;
+
 
 
     @PostMapping("/login")
@@ -73,5 +80,17 @@ public class AuthController {
 
 
                 ));
+
+
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<responseDuckDTO> registerDuck(
+            @Valid @RequestBody
+            createDuckDTO createDuckDTO){
+        responseDuckDTO createdDuck = duckService.createDuck(createDuckDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdDuck);
+    }
+
+
     }

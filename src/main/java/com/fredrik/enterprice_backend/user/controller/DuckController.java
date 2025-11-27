@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -17,14 +18,8 @@ import java.util.List;
 public class DuckController {
     private final DuckService duckService;
 
-    @PostMapping("/register")
-    public ResponseEntity<responseDuckDTO> registerDuck(
-            @Valid @RequestBody
-            createDuckDTO createDuckDTO){
-        responseDuckDTO createdDuck = duckService.createDuck(createDuckDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdDuck);
-    }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping ("/username/{username}")
     public ResponseEntity<responseDuckDTO> findDuckByUsername(
             @PathVariable String username){
@@ -32,6 +27,7 @@ public class DuckController {
         return ResponseEntity.ok(foundDuck);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping ("/email/{email}")
     public ResponseEntity<responseDuckDTO> findDuckByEmail(
             @PathVariable String email){
@@ -39,16 +35,27 @@ public class DuckController {
         return ResponseEntity.ok(foundDuck);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<responseDuckDTO>> getAllDucks(){
         List<responseDuckDTO> allDucks = duckService.getAllDucks();
         return ResponseEntity.ok(allDucks);
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping ("/disableUser/{username}")
     public ResponseEntity<Void> disableDuck(
             @PathVariable String username){
         duckService.disableDuck(username);
+        return ResponseEntity.noContent().build();
+    }
+
+    //? Enable a duck
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/enable/{username}")
+    public ResponseEntity<Void> enableDuck(
+            @PathVariable String username){
+        duckService.enableDuck(username);
         return ResponseEntity.noContent().build();
     }
 

@@ -22,6 +22,7 @@ public interface DuckMapper {
 
     //? This is the same as above but with the Duck as the target
     //? This will convert it to a responseDTO
+    @Mapping(source = "enabled", target = "enabled")
     responseDuckDTO toResponseDTO(Duck duck);
 
     //? This is really the same almost as above but with the Duck as the target

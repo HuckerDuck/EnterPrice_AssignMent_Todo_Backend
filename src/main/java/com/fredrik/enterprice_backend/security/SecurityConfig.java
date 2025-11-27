@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity (prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -35,10 +35,8 @@ public class SecurityConfig {
                         //? When logging in they get a token back
                         //? This will be handy for security reason
                         //? Will match what I will do later in the frontend
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/ducks/register").permitAll()
-                        .requestMatchers("/api/ducks").permitAll()
-                        .requestMatchers("/api/ducks/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/ducks/**").authenticated()
                         //? Rest is gonna require authentication
                         //? = that someone is logged in
                         .anyRequest().authenticated()

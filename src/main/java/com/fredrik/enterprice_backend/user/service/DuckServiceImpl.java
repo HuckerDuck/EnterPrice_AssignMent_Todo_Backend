@@ -1,5 +1,6 @@
 package com.fredrik.enterprice_backend.user.service;
 
+import com.fredrik.enterprice_backend.config.RabbitConfig;
 import com.fredrik.enterprice_backend.user.dto.createDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.responseDuckDTO;
 import com.fredrik.enterprice_backend.user.dto.updateDuckDTO;
@@ -9,6 +10,7 @@ import com.fredrik.enterprice_backend.user.mapper.DuckMapper;
 import com.fredrik.enterprice_backend.user.model.Duck;
 import com.fredrik.enterprice_backend.user.repository.DuckRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.List;
 public class DuckServiceImpl implements DuckService{
     private final DuckRepository duckRepository;
     private final DuckMapper duckMapper;
+    private final RabbitTemplate rabbitTemplate;
 
     // This will work in a way where it will tell Spring
     // To scan for password encoder, then it will go into
@@ -64,6 +67,21 @@ public class DuckServiceImpl implements DuckService{
         //? Save the entity (aka Duck) to the database
         Duck savedDuck = duckRepository.save(duck);
 
+        //? Tries to send a message to RabbitMQ
+        //? If it fails then it will print the error message
+        //? If it succeeds then it will print the message
+        //? Then I can check in RabbitMQ to see if it was sent
+        try {
+            String message = "New Duck added: " + savedDuck.getUsername();
+            rabbitTemplate.convertAndSend(
+                    RabbitConfig.EXCHANGE_NAME,
+                    RabbitConfig.ROUTING_KEY,
+                    message
+            );
+        } catch (Exception e) {
+            System.err.println("RabbitMQ failed: " + e.getMessage());
+        }
+
         //? Use the mapper to convert from an Entity -> DTO
         //? For security reason we use the responseDTO to return what is
         //? Being given back in the response so that we can't see
@@ -83,11 +101,6 @@ public class DuckServiceImpl implements DuckService{
 
         return duckMapper.toResponseDTO(duck);
     }
-
-    //?
-    //?               --- Find a Duck by ID ---
-    //?
-
 
     //?
     //?                     --- Find a Duck by Email ---

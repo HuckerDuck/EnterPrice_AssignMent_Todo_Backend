@@ -15,9 +15,17 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5173"
-        ));
+        //! This will allow all origins
+        //! Beware and only use this in development
+        //! It's a bit unsecure but will work for now.
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+
+        //? Use this one later when you know the IP where the frontend is hosted
+        //?
+        //configuration.setAllowedOrigins(Arrays.asList(
+        //
+        //        "http://localhost:5173"
+        //));
 
         configuration.setAllowedMethods(Arrays.asList(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"

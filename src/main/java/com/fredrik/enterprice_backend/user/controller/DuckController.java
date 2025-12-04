@@ -58,8 +58,4 @@ public class DuckController {
         duckService.enableDuck(username);
         return ResponseEntity.noContent().build();
     }
-
-
-
-
 }

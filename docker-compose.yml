@@ -16,6 +16,27 @@ services:
     networks:
       - backend-net
 
+  enterprice-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: enterprice-backend
+    depends_on:
+      - rabbitmq
+    env_file:
+    ## Uses the ENV files for security reasons ##
+      - .env
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: "5672"
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+
+    ports:
+      - "8080:8080"
+    networks:
+      - backend-net
+
 volumes:
   rabbitmq_data:
 

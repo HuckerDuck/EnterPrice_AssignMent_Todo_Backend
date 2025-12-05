@@ -20,14 +20,7 @@ public class CorsConfig {
         //! It's a bit unsecure but will work for now.
         configuration.setAllowedOriginPatterns(Arrays.asList
                 ("https://ducktasks.vercel.app",
-                        "http://localhost:8080","*"));
-
-        //? Use this one later when you know the IP where the frontend is hosted
-        //?
-        //configuration.setAllowedOrigins(Arrays.asList(
-        //
-        //        "http://localhost:5173"
-        //));
+                        "http://localhost:5173"));
 
         configuration.setAllowedMethods(Arrays.asList(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"

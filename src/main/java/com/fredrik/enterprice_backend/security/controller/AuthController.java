@@ -92,5 +92,35 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDuck);
     }
 
+    //? This is mainly to log out the user from PostMan
+    //? The frontend will handle the logout itself
+    //? It will save the jwt token and logout from the frontend itself
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        // Create a cookie with the name authToken and an empty value
+        Cookie cookie = new Cookie("authToken", null);
+
+
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setSecure(false);
+
+        //? By setting the maxage of this to 0
+        //? The cookie will be deleted immediately
+        cookie.setMaxAge(0);
+        cookie.setAttribute("SameSite", "LAX");
+
+
+        response.addCookie(cookie);
+
+        // We use the logger to log that we have added it
+        logger.info("Logout method was called, authToken cookie cleared.");
+
+        // We send back a simple message
+        return ResponseEntity.ok(Map.of(
+                "message", "Du lyckades logga ut "
+        ));
+    }
+
 
     }
